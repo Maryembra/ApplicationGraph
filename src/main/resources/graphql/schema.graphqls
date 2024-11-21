@@ -1,0 +1,75 @@
+# Définition de l'énumération TypeCompte
+enum TypeCompte {
+    COURANT
+    EPARGNE
+}
+
+# Définition de l'énumération TypeTransaction
+enum TypeTransaction {
+    DEPOT
+    RETRAIT
+}
+
+# Définition du type Compte
+type Compte {
+    id: ID
+    solde: Float
+    dateCreation: String
+    type: TypeCompte
+}
+
+# Définition de la mutation pour enregistrer un compte
+
+type Mutation {
+    saveCompte(compte: CompteRequest): Compte
+    deleteById(id: ID): String
+    addTransaction(transaction: TransactionRequest): Transaction
+}
+
+
+# Définition des requêtes disponibles
+type Query {
+    allComptes: [Compte]
+    compteById(id: ID): Compte
+    totalSolde: SoldeStats
+    findByType(type: TypeCompte): [Compte] # Ajout de la requête findByType
+    compteTransactions(id: ID): [Transaction] # Fusion de la requête compteTransactions
+    transactionStats: TransactionStats # Fusion de la requête transactionStats
+}
+
+# Définition de l'input pour la création de comptes
+input CompteRequest {
+    solde: Float
+    dateCreation: String
+    type: TypeCompte
+}
+
+# Définition des statistiques des soldes
+type SoldeStats {
+    count: Int      # Nombre total de comptes
+    sum: Float      # Somme des soldes
+    average: Float  # Moyenne des soldes
+}
+
+# Définition du type Transaction
+type Transaction {
+    id: ID
+    montant: Float
+    date: String
+    type: TypeTransaction
+    compte: Compte
+}
+
+input TransactionRequest {
+    montant: Float
+    date: String
+    type: TypeTransaction
+    compteId: ID
+}
+
+# Définition des statistiques des transactions
+type TransactionStats {
+    count: Int
+    sumDepots: Float
+    sumRetraits: Float
+}

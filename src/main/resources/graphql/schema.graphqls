@@ -35,14 +35,16 @@ type Query {
     findByType(type: TypeCompte): [Compte] # Ajout de la requête findByType
     compteTransactions(id: ID): [Transaction] # Fusion de la requête compteTransactions
     transactionStats: TransactionStats # Fusion de la requête transactionStats
+    allTransactions: [Transaction]
 }
 
 # Définition de l'input pour la création de comptes
 input CompteRequest {
-    solde: Float
-    dateCreation: String
-    type: TypeCompte
+    solde: Float # Le solde initial du compte
+    dateCreation: String # Date de création au format 'yyyy-MM-dd'
+    type: TypeCompte # Type de compte : COURANT ou EPARGNE
 }
+
 
 # Définition des statistiques des soldes
 type SoldeStats {
@@ -51,14 +53,15 @@ type SoldeStats {
     average: Float  # Moyenne des soldes
 }
 
-# Définition du type Transaction
 type Transaction {
     id: ID
     montant: Float
     date: String
     type: TypeTransaction
     compte: Compte
+    compteId: ID  # Ajout du champ compteId
 }
+
 
 input TransactionRequest {
     montant: Float

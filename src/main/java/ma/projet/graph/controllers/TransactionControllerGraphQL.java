@@ -76,4 +76,8 @@ public class TransactionControllerGraphQL {
                 "sumRetraits", sumRetraits
         );
     }
+    @QueryMapping
+    public List<Transaction> allTransactions() {
+        return transactionRepository.findAll();
+    }
 }

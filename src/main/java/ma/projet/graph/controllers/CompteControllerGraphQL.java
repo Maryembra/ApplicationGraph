@@ -2,8 +2,10 @@ package ma.projet.graph.controllers;
 
 import lombok.AllArgsConstructor;
 import ma.projet.graph.entities.Compte;
+import ma.projet.graph.entities.Transaction;
 import ma.projet.graph.entities.TypeCompte;
 import ma.projet.graph.repositories.CompteRepository;
+import ma.projet.graph.repositories.TransactionRepository;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -17,7 +19,7 @@ import java.util.Map;
 public class CompteControllerGraphQL {
 
     private CompteRepository compteRepository;
-
+    private TransactionRepository transactionRepository;
     @QueryMapping
     public List<Compte> allComptes(){
         return compteRepository.findAll();
@@ -58,12 +60,18 @@ public class CompteControllerGraphQL {
     @MutationMapping
     public String deleteById(@Argument Long id) {
         if (compteRepository.existsById(id)) {
+            // Supprimer les transactions associées avant de supprimer le compte
+            List<Transaction> transactions = transactionRepository.findByCompteId(id);
+            transactionRepository.deleteAll(transactions);
+
+            // Supprimer le compte
             compteRepository.deleteById(id);
             return String.format("Compte with ID %d has been deleted successfully.", id);
         } else {
             throw new RuntimeException(String.format("Compte with ID %d not found.", id));
         }
     }
+
 
 
 }

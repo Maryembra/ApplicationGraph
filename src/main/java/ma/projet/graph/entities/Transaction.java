@@ -1,15 +1,16 @@
 package ma.projet.graph.entities;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,10 @@ public class Transaction {
     private TypeTransaction type;
 
     @ManyToOne
+    @JoinColumn(name = "compte_id")
     private Compte compte; // Association avec un compte
+
+
 }
 
 
